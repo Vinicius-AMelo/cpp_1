@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 
-Circle::Circle(const CircleMesh &mesh, const float startX, const float startY)
+Circle::Circle(const SphereMesh &mesh, const float startX, const float startY)
     : _mesh(mesh), x(startX), y(startY), velocityX(0.0f), velocityY(0.0f), lastVelocityY(velocityY)
 {
     constexpr Gravity gravity;
@@ -13,7 +13,10 @@ Circle::Circle(const CircleMesh &mesh, const float startX, const float startY)
     _ax = forceX;
 }
 
-void Circle::update(const float deltaTime) { check_border_collision(deltaTime); }
+void Circle::update(const float deltaTime)
+{
+    check_border_collision(deltaTime);
+}
 
 void Circle::check_border_collision(const float deltaTime)
 {
@@ -133,10 +136,18 @@ std::pair<float, float> Circle::bounce_force(
     return {pos, velocity};
 }
 
-void Circle::draw(const GLint uOffsetLocation) const
+void Circle::sphere(const int modelLoc, const int viewLoc, const int projectionLoc) const
 {
     _mesh.bind();
+    _mesh.apply_matrices(modelLoc, viewLoc, projectionLoc);
+    _mesh.unbind();
+}
+
+void Circle::draw(const GLint uOffsetLocation) const
+{
+    (void)uOffsetLocation;
+    _mesh.bind();
     glUniform2f(uOffsetLocation, x, y);
-    glDrawArrays(GL_TRIANGLES, 0, _mesh.vertexCount());
+    glDrawElements(GL_TRIANGLES, _mesh.indexCount(), GL_UNSIGNED_INT, nullptr);
     _mesh.unbind();
 }

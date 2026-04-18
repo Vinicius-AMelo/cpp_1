@@ -5,9 +5,11 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <stb_image.h>
 
 #include <app/app.h>
 #include "objects/circle/circle.h"
+#include "objects/circle/cube.h"
 #include "settings/types.h"
 
 namespace
@@ -87,6 +89,7 @@ int App::run()
     }
 
     glViewport(0, 0, windowSettings.windowWidth, windowSettings.windowHeight);
+    glEnable(GL_DEPTH_TEST);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
@@ -107,10 +110,45 @@ int App::run()
 	// 	0, 1, 2,
 	// 	0, 3, 2
 	// };
+
     // clang-format on
-    const CircleMesh circle_mesh(0.1f);
+
+    unsigned int texture1;
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    int width, height, nrChannels;
+    // stbi_set_flip_vertically_on_load(true);
+
+    const std::string texturePath = SHADER_DIR + "/wall.jpg";
+
+    unsigned char *data = stbi_load(
+        texturePath.c_str(), // c_str() converte std::string para const char* (API C)
+        &width,
+        &height,
+        &nrChannels,
+        0
+    );
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
+    const SphereMesh circle_mesh(0.6f);
     Circle circle_1(circle_mesh, 0.0f, 0.0f);
     Circle circle_2(circle_mesh, -0.3f, 0.0f);
+
+    const CubeMesh cube_mesh;
+    Cube cube_1(cube_mesh);
 
     std::string vertexCode = read_file("/triangle.vert");
     const char *shaderVertexCode = vertexCode.c_str();
@@ -153,10 +191,15 @@ int App::run()
         std::cout << "ERROR::PROGRAM::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
-    GLint uOffsetLocation = glGetUniformLocation(shaderProgram, "uOffset");
+    // GLint uOffsetLocation = glGetUniformLocation(shaderProgram, "uOffset");
+    GLint modelLoc = glGetUniformLocation(shaderProgram, "model");
+    GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
+    GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+
+    glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
 
     float lastTime = static_cast<float>(glfwGetTime());
     float fps = 0.0f;
@@ -172,12 +215,20 @@ int App::run()
         fps = fps * smoothing + (1.0f / deltaTime) * (1.0f - smoothing);
         // std::cout << "FPS: " << fps << std::endl;
 
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.3f, 0.4f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(shaderProgram);
 
-        circle_1.update(deltaTime);
-        circle_1.draw(uOffsetLocation);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+
+        cube_mesh.apply_matrices(modelLoc, viewLoc, projectionLoc);
+        
+        cube_1.draw();
+
+        // circle_1.update(deltaTime);
+        // circle_1.sphere(modelLoc, viewLoc, projectionLoc);
+        // circle_1.draw(uOffsetLocation);
 
         // circle_2.update(deltaTime);
         // circle_2.draw(uOffsetLocation);

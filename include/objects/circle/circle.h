@@ -1,6 +1,5 @@
 #pragma once
 #include "objects/circle/circle_mesh.h"
-#include <glm/glm.hpp>
 #include <glad/glad.h>
 
 class Circle
@@ -8,7 +7,7 @@ class Circle
   private:
     float _ay;
     float _ax;
-    CircleMesh _mesh;
+    SphereMesh _mesh;
     bool _touchBorder = false;
 
     void check_border_collision(float deltaTime);
@@ -22,8 +21,8 @@ class Circle
     float velocityY;
     float lastVelocityY;
 
-    Circle(const CircleMesh &mesh, float startX, float startY);
-
+    Circle(const SphereMesh &mesh, float startX, float startY);
+    void sphere(int modelLoc, int viewLoc, int projectionLoc) const;
     void update(float deltaTime);
     void draw(GLint uOffsetLocation) const;
 };

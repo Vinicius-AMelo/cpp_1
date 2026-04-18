@@ -17,6 +17,9 @@ add_executable(${PROJECT_NAME}
         src/graphics/ebo.cpp
         src/objects/circle.cpp
         src/objects/circle_mesh.cpp
+        src/objects/cube.cpp
+        src/objects/cube_mesh.cpp
+        src/stb_image.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
@@ -27,12 +30,10 @@ target_compile_definitions(${PROJECT_NAME}
 )
 
 # GLM: usa a copia versionada no repositorio para evitar diferencas entre sistemas.
-if (EXISTS "${PROJECT_SOURCE_DIR}/lib/glm/glm.hpp")
-    target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/lib/glm)
-else ()
-    find_package(glm CONFIG REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
-endif ()
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/lib/glm)
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/lib/stb)
+
 
 # GLFW: abordagem hibrida.
 # - Windows: tenta pacote CMake, depois copia local versionada no repo, depois FetchContent.
