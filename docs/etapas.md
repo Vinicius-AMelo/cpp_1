@@ -1,0 +1,302 @@
+# Banco de Etapas da Trilha
+
+## Como usar
+- Este arquivo é o mapa operacional da trilha.
+- Cada etapa deve mostrar claramente o que foi planejado, o que já foi feito e o que ainda falta.
+- Atualize `tarefas concluídas`, `exercícios feitos`, `evidências de aprendizado` e `status` sempre que houver avanço real.
+- Status válidos:
+  - `nao_iniciada`
+  - `em_andamento`
+  - `concluida`
+  - `revisar`
+
+## Etapa 1 - Fundação do ambiente
+- Status: `concluida`
+- Objetivo visual: abrir janela limpa com loop renderizando cor de fundo.
+- Conceitos de C++:
+  - compilação e linkedição;
+  - `main`, namespaces e tipos básicos;
+  - referência vs valor;
+  - separação inicial entre headers e source files.
+- Conceitos de OpenGL:
+  - contexto gráfico;
+  - game loop;
+  - clear color;
+  - double buffering.
+- Tarefas planejadas:
+  - explicar com palavras próprias o papel do loop principal.
+- Tarefas concluídas:
+  - mapear o estado atual do projeto e registrar a etapa ativa.
+  - criar `CMakeLists.txt` inicial com `C++17`;
+  - configurar warnings básicos de compilação;
+  - separar a aplicação em `main.cpp`, header e source file;
+  - preparar task de build com `CMake` no VS Code.
+  - validar o ambiente e identificar dependências ausentes para a primeira janela.
+  - validar o ambiente após a instalação dos pacotes necessários.
+  - configurar e compilar o projeto com `CMake` e `Ninja`.
+  - executar o binário gerado pelo fluxo oficial de build.
+  - preparar dependências de janela e contexto OpenGL;
+  - abrir uma janela com loop estável;
+  - limpar a tela com uma cor fixa;
+  - fechar a aplicação sem crash.
+  - implementar mudanca de cor por pressionamento unico de tecla para consolidar input por frame.
+  - consolidar `CMakeLists.txt` hibrido para Windows/Fedora com `OpenGL`, `GLFW`, `GLAD` e `GLM`.
+  - adicionar `CMakePresets.json` com perfis `Ninja` (`debug`/`release`) e perfil dedicado para `CLion MinGW` no Windows.
+  - validar `configure + build` com pipeline real do CLion (`cmake + ninja`) no Windows.
+- Exercícios feitos:
+  - mudanca de cor com tecla `SPACE` por pressionamento unico.
+- Evidências de aprendizado:
+  - existe um programa base em C++ funcionando no terminal;
+  - a trilha e o acompanhamento da etapa foram estruturados.
+  - o projeto já introduz separação entre declaração e implementação;
+  - os pacotes ausentes foram identificados com testes reais de compilação de headers.
+  - o fluxo `configure -> build -> run` foi validado com `CMake` e `Ninja`.
+  - o projeto hoje compila pelo fluxo oficial planejado para a trilha.
+  - a aplicacao abre uma janela GLFW funcional e renderiza uma cor de fundo.
+  - o comportamento de input continuo vs input de pressionamento unico foi praticado no codigo.
+  - o projeto agora tem caminho de build reproduzivel via presets para CLion com Ninja.
+  - a diferenca entre problema de script CMake e problema de toolchain/ambiente foi validada na pratica.
+- Critérios de saída:
+  - projeto compila via `CMake`;
+  - janela abre e permanece estável;
+  - cor de fundo é renderizada;
+  - explicação do loop principal registrada no `logbook`.
+
+## Etapa 2 - Primeiro triângulo
+- Status: `em_andamento`
+- Objetivo visual: desenhar um triângulo estático.
+- Observacao de progresso: entrega visual base concluida; etapa segue aberta para consolidacao conceitual e explicacao autoral.
+- Conceitos de C++:
+  - arrays;
+  - `std::array`;
+  - funções;
+  - escopo;
+  - `const`.
+- Conceitos de OpenGL:
+  - pipeline moderna;
+  - vertex data;
+  - `VAO`;
+  - `VBO`;
+  - vertex shader;
+  - fragment shader.
+- Tarefas planejadas:
+  - criar dados de vértice para um triângulo;
+  - subir os dados para um `VBO`;
+  - configurar um `VAO`;
+  - compilar vertex e fragment shader sem erro;
+  - desenhar o triângulo na tela;
+  - explicar o fluxo CPU -> buffer -> shader -> tela.
+  - consolidar, sem consulta, a diferenca entre atributo de vertice e `uniform`.
+  - consolidar, sem consulta, o papel de `stride` e `offset` no `glVertexAttribPointer`.
+- Tarefas concluídas:
+  - integrar `GLAD` ao projeto via `lib/glad`.
+  - carregar e validar funcoes OpenGL modernas com `gladLoadGLLoader`.
+  - criar dados de vertice para um triangulo.
+  - subir dados para `VBO`.
+  - configurar `VAO` e atributo de posicao.
+  - criar, compilar e linkar shaders separados em arquivo (`.vert`/`.frag`).
+  - desenhar triangulo na tela com `glDrawArrays`.
+  - evoluir para quadrado usando `EBO` e `glDrawElements`.
+  - adicionar trilha de movimento com `GL_LINE_STRIP` e buffer dinamico.
+  - criar guias locais de referencia para retomada (`docs/glfw.md` e `docs/glad.md`).
+  - aprofundar os guias com relacao entre ordem de chamadas, estados ativos e efeito pratico de cada funcao.
+  - consolidar checkpoint de retomada documental em `2026-04-16` com base no ultimo progresso registrado.
+- Exercícios feitos:
+  - explicacao guiada do papel de `VAO`, `VBO`, shaders e coordenadas dos vertices.
+  - revisao guiada da sequencia `glBindVertexArray -> glBindBuffer -> glBufferData -> glVertexAttribPointer -> glEnableVertexAttribArray`.
+- Evidências de aprendizado:
+  - triangulo renderizando em janela OpenGL.
+  - pasta `assets/shaders` em uso real no projeto.
+  - entendimento inicial do fluxo CPU -> buffer -> shader -> tela registrado em sessao.
+  - quadrado renderizando com indices (reuso de vertices).
+  - trilha renderizando como linha continua ao longo do tempo.
+  - material didatico proprio para repetir setup em projeto novo sem depender de memoria.
+  - mapa autoral de GLFW e GLAD/OpenGL com explicacao do "antes", "durante" e "depois" de cada chamada principal.
+  - clareza de que a etapa permanece aberta por consolidacao de entendimento, nao por falta de entrega visual.
+- Critérios de saída:
+  - triângulo aparece na tela;
+  - shaders compilam de forma estável;
+  - explicação do pipeline registrada no `logbook`.
+
+## Etapa 3 - Triângulos melhores e organização
+- Status: `nao_iniciada`
+- Objetivo visual: desenhar quadrado com `EBO` e múltiplas cores.
+- Conceitos de C++:
+  - `struct`;
+  - constructors;
+  - separação em `.hpp` e `.cpp`;
+  - enums;
+  - `std::vector`.
+- Conceitos de OpenGL:
+  - `EBO`;
+  - atributos de vértice;
+  - interpolação de cor;
+  - uniforms.
+- Tarefas planejadas:
+  - modelar um `Vertex` simples com posição e cor;
+  - desenhar um quadrado com índices;
+  - usar `EBO` sem duplicar vértices desnecessariamente;
+  - organizar shaders e buffers em código menos procedural;
+  - alterar cor via atributo ou uniform de forma consciente.
+- Tarefas concluídas:
+  - nenhuma ainda.
+- Exercícios feitos:
+  - nenhum ainda.
+- Evidências de aprendizado:
+  - nenhuma ainda.
+- Critérios de saída:
+  - quadrado renderiza corretamente;
+  - diferença entre `VBO`, `VAO` e `EBO` foi registrada;
+  - a primeira refatoração em módulos simples foi feita.
+
+## Etapa 4 - Transformações e câmera 2D/3D simples
+- Status: `nao_iniciada`
+- Objetivo visual: objetos transladando, rotacionando e escalando.
+- Conceitos de C++:
+  - classes pequenas;
+  - encapsulamento;
+  - RAII;
+  - inicialização por lista;
+  - overload básico.
+- Conceitos de OpenGL:
+  - matrizes;
+  - model/view/projection;
+  - coordenadas normalizadas;
+  - uso de `GLM`.
+- Tarefas planejadas:
+  - aplicar translação em um objeto;
+  - aplicar rotação controlada pelo tempo;
+  - aplicar escala sem distorção inesperada;
+  - enviar matrizes para o shader via uniform;
+  - estruturar uma abstração inicial de transformação;
+  - testar uma relação de objeto filho girando em torno do pai.
+- Tarefas concluídas:
+  - nenhuma ainda.
+- Exercícios feitos:
+  - nenhum ainda.
+- Evidências de aprendizado:
+  - nenhuma ainda.
+- Critérios de saída:
+  - transformações funcionam visualmente;
+  - hierarquia simples foi testada;
+  - entendimento de model/view/projection foi registrado.
+
+## Etapa 5 - Cena com múltiplos corpos
+- Status: `nao_iniciada`
+- Objetivo visual: vários corpos na tela, cada um com posição e velocidade próprias.
+- Conceitos de C++:
+  - `std::vector<Body>`;
+  - passagem por referência;
+  - funções puras vs mutáveis;
+  - organização por responsabilidade.
+- Conceitos de OpenGL:
+  - múltiplos draws por frame;
+  - atualização de cena;
+  - cores por objeto;
+  - separação entre `update` e `render`.
+- Tarefas planejadas:
+  - criar uma estrutura `Body` com dados mínimos;
+  - renderizar múltiplos corpos em posições diferentes;
+  - atualizar estado dos corpos a cada frame;
+  - pausar e retomar a simulação;
+  - garantir separação clara entre lógica e renderização.
+- Tarefas concluídas:
+  - nenhuma ainda.
+- Exercícios feitos:
+  - nenhum ainda.
+- Evidências de aprendizado:
+  - nenhuma ainda.
+- Critérios de saída:
+  - múltiplos corpos aparecem e se movem;
+  - `update` e `render` estão desacoplados de forma legível;
+  - progresso registrado com exemplos no `logbook`.
+
+## Etapa 6 - Física básica e gravidade
+- Status: `nao_iniciada`
+- Objetivo visual: corpos atraindo-se e alterando trajetória.
+- Conceitos de C++:
+  - modelagem de dados;
+  - invariantes;
+  - funções matemáticas;
+  - debugging numérico;
+  - `constexpr` quando fizer sentido.
+- Conceitos de OpenGL:
+  - visualização da simulação quadro a quadro;
+  - uso consistente de `deltaTime`;
+  - integração com atualização física.
+- Tarefas planejadas:
+  - calcular força gravitacional entre corpos;
+  - converter força em aceleração e velocidade;
+  - aplicar integração de Euler semi-implícita;
+  - comparar comportamento com `deltaTime` fixo e variável;
+  - observar e registrar instabilidades numéricas.
+- Tarefas concluídas:
+  - nenhuma ainda.
+- Exercícios feitos:
+  - nenhum ainda.
+- Evidências de aprendizado:
+  - nenhuma ainda.
+- Critérios de saída:
+  - corpos interagem gravitacionalmente;
+  - efeitos de massa e tempo são compreendidos;
+  - comparação entre integrações foi registrada.
+
+## Etapa 7 - Escala, estabilidade e arquitetura
+- Status: `nao_iniciada`
+- Objetivo visual: mini sistema solar jogável, com câmera navegável e trilhas opcionais.
+- Conceitos de C++:
+  - ownership;
+  - ponteiros inteligentes quando necessários;
+  - composição;
+  - separação entre dados e comportamento;
+  - profiling básico.
+- Conceitos de OpenGL:
+  - câmera navegável;
+  - trail rendering simples;
+  - zoom;
+  - organização de shaders.
+- Tarefas planejadas:
+  - melhorar a estrutura dos módulos principais;
+  - adicionar navegação ou zoom na cena;
+  - desenhar trilhas opcionais dos corpos;
+  - investigar gargalos ou explosões numéricas;
+  - documentar decisões arquiteturais relevantes.
+- Tarefas concluídas:
+  - nenhuma ainda.
+- Exercícios feitos:
+  - nenhum ainda.
+- Evidências de aprendizado:
+  - nenhuma ainda.
+- Critérios de saída:
+  - a simulação fica explorável;
+  - o código ganha estrutura mais próxima de uma mini engine;
+  - riscos técnicos principais ficam documentados.
+
+## Etapa 8 - Grid deformável e apresentação final
+- Status: `nao_iniciada`
+- Objetivo visual: grid horizontal sendo deformado pela influência de massa + planetas orbitando.
+- Conceitos de C++:
+  - algoritmos sobre coleções;
+  - abstrações pequenas;
+  - manutenção orientada por clareza;
+  - refatoração incremental.
+- Conceitos de OpenGL:
+  - malha em grid;
+  - atualização dinâmica de vértices;
+  - visualização simplificada de campo gravitacional.
+- Tarefas planejadas:
+  - gerar uma malha de grid simples;
+  - deformar vértices com base na influência dos corpos;
+  - testar pelo menos duas fórmulas visuais de deformação;
+  - integrar o grid com a cena dos planetas;
+  - preparar a demo final para exploração.
+- Tarefas concluídas:
+  - nenhuma ainda.
+- Exercícios feitos:
+  - nenhum ainda.
+- Evidências de aprendizado:
+  - nenhuma ainda.
+- Critérios de saída:
+  - grid responde visualmente à presença de massa;
+  - a cena final comunica bem a ideia do projeto;
+  - a trilha chega à demo planejada.

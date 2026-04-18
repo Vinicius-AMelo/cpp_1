@@ -1,0 +1,26 @@
+# Build directories
+build/
+cmake-build-*/
+out/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# CLion / JetBrains
+.idea/
+
+# Visual Studio / Windows
+*.vcxproj
+*.vcxproj.filters
+*.sln
+
+# Binaries
+*.exe
+*.out
+*.dll
+*.so
+*.dylib

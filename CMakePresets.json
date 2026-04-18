@@ -1,0 +1,90 @@
+{
+	"version": 6,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 16,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "ninja-debug",
+			"displayName": "Ninja Debug",
+			"description": "Configura em Debug com gerador Ninja (usa ninja do PATH)",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/build/ninja-debug",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "ninja-release",
+			"displayName": "Ninja Release",
+			"description": "Configura em Release com gerador Ninja (usa ninja do PATH)",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/build/ninja-release",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
+			"name": "clion-mingw-ninja-debug",
+			"displayName": "CLion MinGW Ninja Debug (Windows)",
+			"description": "Configura Debug usando Ninja+MinGW do CLion com PATH corrigido",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/cmake-build-debug",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			},
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"CMAKE_MAKE_PROGRAM": "$env{LOCALAPPDATA}/Programs/CLion/bin/ninja/win/x64/ninja.exe"
+			},
+			"environment": {
+				"PATH": "$env{LOCALAPPDATA}/Programs/CLion/bin/mingw/bin;$penv{PATH}"
+			}
+		},
+		{
+			"name": "clion-mingw-ninja-release",
+			"displayName": "CLion MinGW Ninja Release (Windows)",
+			"description": "Configura Release usando Ninja+MinGW do CLion com PATH corrigido",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/cmake-build-release",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			},
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release",
+				"CMAKE_MAKE_PROGRAM": "$env{LOCALAPPDATA}/Programs/CLion/bin/ninja/win/x64/ninja.exe"
+			},
+			"environment": {
+				"PATH": "$env{LOCALAPPDATA}/Programs/CLion/bin/mingw/bin;$penv{PATH}"
+			}
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "build-ninja-debug",
+			"displayName": "Build Ninja Debug",
+			"configurePreset": "ninja-debug"
+		},
+		{
+			"name": "build-ninja-release",
+			"displayName": "Build Ninja Release",
+			"configurePreset": "ninja-release"
+		},
+		{
+			"name": "build-clion-mingw-ninja-debug",
+			"displayName": "Build CLion MinGW Ninja Debug",
+			"configurePreset": "clion-mingw-ninja-debug"
+		},
+		{
+			"name": "build-clion-mingw-ninja-release",
+			"displayName": "Build CLion MinGW Ninja Release",
+			"configurePreset": "clion-mingw-ninja-release"
+		}
+	]
+}

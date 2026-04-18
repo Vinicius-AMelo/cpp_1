@@ -1,0 +1,540 @@
+# Logbook de Sessões
+
+## Como usar
+- Adicione cada nova sessão no topo da seção `Sessões`, mantendo ordem reversa cronológica.
+- Atualize este arquivo mesmo quando a etapa não for concluída.
+- Use entradas curtas e objetivas para facilitar retomada futura.
+- Sempre que houver mudança em arquivo, ferramenta ou estrutura do projeto, registre também o motivo e a explicação do conceito.
+- Sempre que houver erro, warning ou bloqueio, registre o significado e a forma de correção, não apenas o sintoma.
+- Quando a preferencia de trabalho mudar, registre a nova metodologia aqui para preservar continuidade entre sessoes.
+
+## Template de nova sessão
+```md
+## Sessão - YYYY-MM-DD HH:MM
+- Data: `YYYY-MM-DD`
+- Duração opcional: `00h00`
+- Objetivo da sessão:
+- O que fiz:
+- O que mudou e por quê:
+- Como a explicação foi conduzida:
+- O que aprendi em C++:
+- O que aprendi em OpenGL:
+- Dificuldades:
+- Erros, warnings ou bloqueios e o que significam:
+- Decisões tomadas:
+- Próximo passo:
+```
+
+## Sessões
+
+## Sessão - 2026-04-16 18:20
+- Data: `2026-04-16`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: fechar configuração CMake para CLion com Ninja em Windows/Fedora sem retrabalho manual de libs por máquina.
+- O que fiz:
+  - criei e refinei `CMakeLists.txt` com abordagem híbrida de dependências;
+  - mantive `GLM` preferindo cópia local versionada em `lib/glm`;
+  - configurei `GLAD` para usar pacote quando existir e fallback para `src/glad.c` + `lib/glad/include`;
+  - configurei `GLFW` híbrido:
+    - Windows: `find_package`, fallback para `lib/glfw` (MSVC) e fallback final `FetchContent`;
+    - Linux/Fedora: `pkg-config` (`glfw3`);
+  - adicionei `CMakePresets.json` com presets Ninja genéricos e presets específicos de CLion MinGW no Windows;
+  - ajustei `SHADER_DIR` para aceitar caminho absoluto injetado por `CMake` (`SHADER_DIR_PATH`), evitando dependência do diretório de execução;
+  - validei configure/build no fluxo real do CLion com Ninja.
+- O que mudou e por quê:
+  - o projeto passou a ter uma configuração mais portável e previsível para CMake/Ninja em ambientes diferentes;
+  - o build que falhava no CLion MinGW foi estabilizado com preset dedicado que prioriza o PATH do MinGW do próprio CLion.
+- Como a explicação foi conduzida:
+  - foco em reproduzir o comando real do CLion;
+  - diferenciação clara entre erro de CMake e erro de toolchain.
+- O que aprendi em C++:
+  - macros de compilação (`target_compile_definitions`) podem desacoplar caminho de recurso da pasta de execução;
+  - manter fallback local de dependência reduz fricção em máquinas diferentes.
+- O que aprendi em OpenGL:
+  - shaders externos ficam mais robustos quando o caminho vem do build system, não do diretório atual do processo.
+- Dificuldades:
+  - diferença entre pipeline MSVC e pipeline MinGW no Windows;
+  - falha silenciosa do `cc1plus` no MinGW quando o PATH resolve DLL incompatível primeiro.
+- Erros, warnings ou bloqueios e o que significam:
+  - configure com Ninja falhava sem `ninja` no PATH global;
+  - build no MinGW falhava sem mensagem clara por conflito de DLL (`libwinpthread-1.dll`) no ambiente;
+  - warning de `pwsh.exe` apareceu no fluxo MSBuild por integração global do `vcpkg`, não por erro no projeto.
+- Decisões tomadas:
+  - manter presets Ninja no repositório;
+  - manter preset específico para CLion MinGW no Windows com PATH corrigido;
+  - manter estratégia híbrida de dependências para evitar download manual recorrente.
+- Próximo passo:
+  - validar no Fedora com `cmake --preset ninja-debug` e `cmake --build --preset build-ninja-debug` usando pacotes de sistema.
+
+## Sessão - 2026-04-16 03:35
+- Data: `2026-04-16`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: retomar a demanda documental e sincronizar os documentos de acompanhamento com o ultimo progresso registrado.
+- O que fiz:
+  - reli `docs/status.md`, `docs/etapas.md`, `docs/contexto.md`, `docs/trilha.md` e o ultimo checkpoint do `docs/logbook.md`;
+  - atualizei `docs/status.md` com nova data de checkpoint e contexto de retomada;
+  - atualizei `docs/etapas.md` para deixar explicito por que a Etapa 2 continua `em_andamento`;
+  - registrei esta sessão para manter continuidade formal da trilha.
+- O que mudou e por quê:
+  - os documentos agora deixam claro que o progresso visual da Etapa 2 ja existe, mas o fechamento pedagogico depende da consolidacao conceitual;
+  - isso evita inconsistencia entre "tarefa visual pronta" e "status ainda aberto", facilitando a retomada consciente.
+- Como a explicação foi conduzida:
+  - foco em continuidade entre documentos (`status`, `etapas`, `logbook`);
+  - linguagem objetiva, sem introduzir features novas nao registradas anteriormente.
+- O que aprendi em C++:
+  - registrar estado de aprendizado e tao importante quanto registrar estado de codigo para manter evolucao consistente.
+- O que aprendi em OpenGL:
+  - etapas de pipeline podem estar visualmente prontas e ainda exigir consolidacao de conceitos de estado e layout de atributos.
+- Dificuldades:
+  - manter precisao de historico sem inferir progresso novo que nao estava formalmente registrado.
+- Erros, warnings ou bloqueios e o que significam:
+  - nao houve erro tecnico novo nesta sessao;
+  - a atividade foi exclusivamente de sincronizacao documental.
+- Decisões tomadas:
+  - manter a Etapa 2 como `em_andamento` ate registrar explicacao autoral de `uniform`, `stride` e `offset`;
+  - usar o checkpoint de `2026-04-12 13:09` como base oficial desta retomada.
+- Próximo passo:
+  - executar uma sessao pratica curta para fechar a consolidacao conceitual da Etapa 2 e registrar o passo a passo autoral no `logbook`.
+
+## Sessão - 2026-04-12 13:09
+- Data: `2026-04-12`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: transformar a preferencia por documentacao de alto nivel em regra persistente para todos os agentes que atuarem no projeto.
+- O que fiz:
+  - atualizei `AGENTS.md` com uma regra explicita de alto padrao para documentacao e didatica;
+  - atualizei `docs/contexto.md` para deixar claro como documentacoes tecnicas devem ser escritas e ensinadas;
+  - atualizei `docs/trilha.md` para incorporar esse padrao na execucao pedagogica da trilha;
+  - atualizei `docs/status.md` para registrar essa preferencia como estado atual do projeto.
+- O que mudou e por quê:
+  - a preferencia deixou de ser apenas um combinado recente e virou instrução persistente para qualquer agente futuro;
+  - isso reduz o risco de a documentacao perder qualidade, cair para um tom generico ou ficar inconsistente entre sessoes.
+- Como a explicação foi conduzida:
+  - linguagem direcionada a agentes e manutencao futura;
+  - foco em criterios objetivos de qualidade, como ordem de uso, pre-requisitos, efeito posterior e conexao com o projeto real.
+- O que aprendi em C++:
+  - documentacao pedagogica consistente ajuda tanto quanto o proprio codigo na retomada de conceitos e padroes.
+- O que aprendi em OpenGL:
+  - registrar explicitamente estados e dependencias entre chamadas e especialmente importante em APIs stateful como OpenGL.
+- Dificuldades:
+  - transformar uma preferencia subjetiva de "texto bom" em instrucoes objetivas, reaproveitaveis e verificaveis.
+- Erros, warnings ou bloqueios e o que significam:
+  - nao houve bloqueio tecnico novo;
+  - a sessao foi exclusivamente documental e metodologica.
+- Decisões tomadas:
+  - `docs/glfw.md` e `docs/glad.md` passam a funcionar como referencia de qualidade para futuras documentacoes tecnicas;
+  - qualquer agente que tocar `docs/` deve manter ou elevar o nivel didatico existente.
+- Próximo passo:
+  - seguir expandindo os guias tecnicos do projeto no mesmo padrao sempre que novas funcoes, ferramentas ou conceitos forem introduzidos.
+
+## Sessão - 2026-04-12 12:57
+- Data: `2026-04-12`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: aprofundar os guias de `GLFW` e `GLAD/OpenGL` para um nivel realmente util a retomada do zero por um iniciante.
+- O que fiz:
+  - reescrevi `docs/glfw.md` com tutorial passo a passo de inicializacao, criacao de janela, contexto, loop, input e encerramento;
+  - reescrevi `docs/glad.md` separando claramente o papel do `GLAD` do papel das funcoes `gl*` do OpenGL;
+  - documentei cada funcao com foco em ordem de uso, pre-requisitos, efeito posterior, parametros e pegadinhas comuns;
+  - atualizei `docs/status.md` e `docs/etapas.md` para registrar esse refinamento pedagogico.
+- O que mudou e por quê:
+  - os guias deixaram de ser apenas uma lista de funcoes e passaram a funcionar como roteiro de montagem mental;
+  - a nova versao explica melhor o encadeamento entre `VAO`, `VBO`, `EBO`, shader program, uniform e draw, que era o ponto mais facil de ficar vago para um iniciante.
+- Como a explicação foi conduzida:
+  - linguagem direta em PT-BR;
+  - foco em "o que precisa existir antes" e "o que passa a valer depois";
+  - exemplos conectados aos blocos reais do `app.cpp`.
+- O que aprendi em C++:
+  - documentacao tecnica fica mais util quando explica o estado do programa e nao apenas a assinatura da funcao;
+  - exemplos do proprio projeto ajudam a transformar API C em referencia de uso concreto.
+- O que aprendi em OpenGL:
+  - `glBindVertexArray(...)` define o alvo de configuracao dos atributos;
+  - `glVertexAttribPointer(...)` salva no `VAO` atual como ler um atributo e de qual `VBO` ele vem;
+  - `GL_ELEMENT_ARRAY_BUFFER` fica associado ao `VAO` atual, enquanto `GL_ARRAY_BUFFER` serve como fonte no momento da configuracao do atributo.
+- Dificuldades:
+  - manter a explicacao objetiva sem deixar de explicar a cadeia de dependencias entre as chamadas.
+- Erros, warnings ou bloqueios e o que significam:
+  - nao houve bloqueio tecnico novo;
+  - o foco da sessao foi clareza didatica e memoria de longo prazo do projeto.
+- Decisões tomadas:
+  - manter `docs/glfw.md` e `docs/glad.md` como guias vivos de retomada;
+  - sempre que uma nova funcao `glfw*` ou `gl*` entrar no codigo, ela deve ser adicionada nesses arquivos com a mesma estrutura didatica.
+- Próximo passo:
+  - usar os guias para criar uma forma nova do zero sem copiar o bloco atual, explicando em voz propria o papel de cada bind e de cada atributo.
+
+## Sessão - 2026-04-12 12:45
+- Data: `2026-04-12`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: criar documentacao autoral de `GLFW` e `GLAD/OpenGL` para permitir retomada do zero com autonomia.
+- O que fiz:
+  - criei `docs/glfw.md` com fluxo de inicializacao, funcao por funcao, parametros e mini tutorial de janela/contexto/loop;
+  - criei `docs/glad.md` com papel do loader, fluxo de renderizacao, funcoes `gl*` usadas no projeto e regras praticas de draw;
+  - atualizei `docs/status.md` e `docs/etapas.md` para refletir a criacao desses guias como marco pedagogico da Etapa 2.
+- O que mudou e por quê:
+  - o projeto agora tem dois "manuais de bolso" em PT-BR para reduzir dependencia de memoria e acelerar retomadas;
+  - a explicacao foi organizada como mapa de execucao + referencia de parametros para cada funcao mais usada.
+- Como a explicação foi conduzida:
+  - foco em linguagem didatica direta;
+  - conexao entre teoria e os blocos reais do `app.cpp`;
+  - prioridade para entendimento de estados do OpenGL (`bind`, `buffer`, `atributos`, `draw`).
+- O que aprendi em C++:
+  - documentacao de API no contexto do proprio projeto acelera depuracao e onboarding futuro;
+  - separar guias por biblioteca reduz carga cognitiva na hora de revisar.
+- O que aprendi em OpenGL:
+  - diferenca pratica entre `glDrawArrays` e `glDrawElements`;
+  - relacao entre `VAO`, `VBO`, `EBO`, layout de atributos e shader locations;
+  - diferenca de uso entre `GL_STATIC_DRAW` e `GL_DYNAMIC_DRAW` na malha e na trilha.
+- Dificuldades:
+  - grande volume de conceitos conectados (GLFW + GLAD + OpenGL moderno) exigindo organizacao em blocos.
+- Erros, warnings ou bloqueios e o que significam:
+  - nao houve bloqueio tecnico novo nesta sessao;
+  - foco principal foi consolidacao documental e pedagogica.
+- Decisões tomadas:
+  - manter `docs/glfw.md` e `docs/glad.md` como base oficial de retomada da trilha;
+  - continuar expandindo esses guias conforme novas funcoes entrarem no codigo.
+- Próximo passo:
+  - usar os novos guias para criar uma forma nova de maneira autoral e registrar o passo a passo no logbook.
+
+## Sessão - 2026-04-11 19:16
+- Data: `2026-04-11`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: avançar para a Etapa 2 com primeiro triângulo e registrar checkpoint de pausa.
+- O que fiz:
+  - integrei `GLAD` ao projeto com headers e `glad.c`;
+  - ajustei ordem de includes para evitar conflito entre `glad` e headers OpenGL do `GLFW`;
+  - habilitei linguagem `C` no `CMake` para compilar `glad.c`;
+  - configurei include path do `glad` também no VS Code;
+  - configurei shaders externos em `assets/shaders` e leitura por arquivo no `app.cpp`;
+  - renderizei o primeiro triângulo na tela com `VAO`, `VBO` e `glDrawArrays`;
+  - fiz explicacao detalhada do pipeline e do papel de cada componente.
+- O que mudou e por quê:
+  - o projeto saiu do "clear color" para renderizacao real de geometria;
+  - shaders foram movidos para arquivos separados para facilitar manutencao e aprendizado;
+  - a etapa 2 foi iniciada com estrutura mais proxima do fluxo moderno de OpenGL.
+- Como a explicação foi conduzida:
+  - blocos curtos no chat;
+  - comentarios didaticos nos trechos de codigo novos;
+  - foco em "quem faz o que" (CPU, GPU, GLFW, GLAD, shader, VAO, VBO).
+- O que aprendi em C++:
+  - leitura de arquivo com `std::ifstream` + `std::stringstream` para carregar shader source;
+  - uso de `const char*` a partir de `std::string` com `.c_str()` na chamada de API C.
+- O que aprendi em OpenGL:
+  - `vertex shader` processa vertices e define `gl_Position`;
+  - `fragment shader` define a cor final dos pixels;
+  - `VBO` armazena dados de vertices na GPU;
+  - `VAO` guarda a configuracao de como interpretar atributos dos vertices.
+- Dificuldades:
+  - warnings ruidosos de `-Wpedantic` no `glad.c` (codigo de terceiro).
+- Erros, warnings ou bloqueios e o que significam:
+  - erro de include `glad/glad.h` no editor ocorreu por configuracao e ordem de include;
+  - erro de link com `gladLoadGLLoader` ocorreu porque `glad.c` nao estava sendo compilado como `C`;
+  - warnings em `glad.c` foram reduzidos ao limitar flags estritas para compilacao C++ do projeto.
+- Decisões tomadas:
+  - manter `GLAD` local no repositorio em `lib/glad`;
+  - manter shaders em `assets/shaders`;
+  - manter explicacoes didaticas detalhadas como padrao.
+- Próximo passo:
+  - retomar da pausa consolidando `uniform` e atribuicao de cores por vertice para fechar a Etapa 2.
+
+## Sessão - 2026-04-11 16:50
+- Data: `2026-04-11`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: registrar como regra documental o envio de codigo com comentarios didaticos detalhados.
+- O que fiz:
+  - atualizei `AGENTS.md` com uma regra explicita para comentarios didaticos em codigo enviado no chat;
+  - atualizei `docs/contexto.md` na secao "Como o codigo deve ser ensinado";
+  - atualizei `docs/trilha.md` na regra pedagogica de execucao;
+  - atualizei `docs/status.md` com a nova preferencia ativa e a ultima atualizacao da sessao.
+- O que mudou e por quê:
+  - agora o projeto formaliza que sintaxes novas e trechos centrais devem vir com comentario detalhado no proprio codigo compartilhado;
+  - isso aumenta a clareza de leitura e reduz lacunas de entendimento em pontos mais densos de C++.
+- Como a explicação foi conduzida:
+  - definicao objetiva da regra;
+  - exemplo concreto de sintaxe nova (`std::srand(static_cast<unsigned>(std::time(nullptr)));`) para orientar o nivel de detalhamento esperado.
+- O que aprendi em C++:
+  - comentarios didaticos bem posicionados ajudam a entender conversoes de tipo, inicializacao e APIs da biblioteca padrao com menos ambiguidade.
+- O que aprendi em OpenGL:
+  - a mesma abordagem de comentario pode ser aplicada em chamadas de render para separar "estado", "acao" e "efeito visual".
+- Dificuldades:
+  - nenhuma tecnica relevante na sessao.
+- Erros, warnings ou bloqueios e o que significam:
+  - nao houve erro ou warning novo.
+- Decisões tomadas:
+  - toda resposta com codigo deve priorizar comentarios didaticos nos pontos centrais e nas sintaxes novas da etapa.
+- Próximo passo: continuar o fechamento da Etapa 1 com input por pressionamento unico de tecla, mantendo o novo padrao de comentario no codigo mostrado.
+
+## Sessão - 2026-04-11 13:46
+- Data: `2026-04-11`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: ajustar a formatacao para um estilo mais vertical e legivel, conforme preferencia do usuario.
+- O que fiz:
+  - revisei `src/app.cpp` e os exemplos visuais de estilo desejado;
+  - refinei o arquivo `.clang-format` com regras para quebra de argumentos, alinhamento e indentacao;
+  - ajustei manualmente no `app.cpp` os trechos de `switch`, `glfwCreateWindow(...)` e `glClearColor(...)`;
+  - recompilei o projeto para validar que a mudanca foi apenas de estilo.
+- O que mudou e por quê:
+  - os argumentos de chamadas longas passaram a ficar um por linha, com fechamento `)` em linha propria;
+  - os `case` do `switch` foram recuados para facilitar leitura em bloco;
+  - o objetivo foi aproximar o codigo do estilo didatico desejado, sem alterar a logica.
+- Como a explicação foi conduzida:
+  - foco em diferenciar “regra de formatter” de “ajuste manual de estilo”;
+  - explicacao curta por bloco visual (switch, chamada de funcao, fechamento).
+- O que aprendi em C++:
+  - formatacao consistente melhora leitura de fluxo de controle e chamadas com muitos argumentos;
+  - estilo nao muda o comportamento, mas reduz carga cognitiva ao revisar codigo.
+- O que aprendi em OpenGL:
+  - chamadas frequentes como `glClearColor(...)` ficam mais claras no debug quando os parametros estao em formato vertical.
+- Dificuldades:
+  - o binario `clang-format` nao esta disponivel no sistema para formatacao por terminal.
+- Erros, warnings ou bloqueios e o que significam:
+  - `command not found: clang-format` indica ausencia da ferramenta no ambiente, nao problema no codigo.
+- Decisões tomadas:
+  - manter o estilo visual pedido no codigo atual com ajuste manual;
+  - manter regras de `.clang-format` mais restritivas para convergir com o padrao desejado.
+- Próximo passo: validar no editor se o formatter da extensao respeita o arquivo `.clang-format`; se nao respeitar, instalar `clang-format` no sistema e repetir o teste.
+
+## Sessão - 2026-04-10 14:35
+- Data: `2026-04-10`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: consolidar o entendimento do arquivo `app.cpp` e dos conceitos de estado, input e tipagem usados na primeira janela.
+- O que fiz:
+  - expliquei linha por linha o `app.cpp`;
+  - esclareci a diferenca entre permitir redimensionamento da janela e atualizar o viewport com callback;
+  - expliquei como modelar a cor usando `struct Color`;
+  - expliquei a diferenca entre constante inicial e estado mutavel;
+  - expliquei o erro envolvendo metodo `const` e alteracao de estado;
+  - expliquei por que `backgroundColor` deve ser acessado com `this->backgroundColor` se a preferencia for explicitude;
+  - expliquei o uso de `static_cast<float>` em vez de cast estilo C;
+  - expliquei por que a cor piscava ao segurar a tecla de espaco.
+- O que mudou e por quê:
+  - nao houve mudanca relevante de codigo nesta sessao;
+  - o progresso foi principalmente conceitual e metodologico, focado em fazer o comportamento atual do programa ficar compreensivel.
+- Como a explicação foi conduzida:
+  - respostas em blocos pequenos;
+  - foco em uma duvida por vez;
+  - exemplos curtos e conectados diretamente ao codigo atual;
+  - prioridade para que o usuario escreva as proximas mudancas manualmente.
+- O que aprendi em C++:
+  - `constexpr` define valores constantes apropriados para configuracoes fixas;
+  - o prefixo `k` e uma convencao para constantes, nao regra da linguagem;
+  - `static_cast<float>` e o estilo moderno e explicito para conversoes numericas;
+  - `this->` ajuda a visualizar membros da instancia atual;
+  - um metodo `const` nao pode alterar o estado do objeto.
+- O que aprendi em OpenGL:
+  - callback de framebuffer size nao impede resize da janela; ele apenas atualiza o viewport;
+  - segurar uma tecla gera leituras repetidas por frame se a logica olhar apenas para o estado atual da tecla.
+- Dificuldades:
+  - varios conceitos estavam se cruzando ao mesmo tempo: estado do objeto, input, const, cast e modelagem de cor.
+- Erros, warnings ou bloqueios e o que significam:
+  - a piscada de cores ao apertar espaco nao era atribuicao parcial da struct;
+  - ela acontecia porque a tecla estava sendo lida como pressionada em frames consecutivos, gerando novas cores repetidamente.
+- Decisões tomadas:
+  - manter `this->` por enquanto como apoio visual de aprendizado;
+  - continuar evitando edicao automatica de codigo, priorizando escrita manual guiada.
+- Próximo passo: implementar manualmente a troca de cor por pressionamento unico da tecla e usar isso para fechar a Etapa 1.
+
+## Sessão - 2026-04-10 13:21
+- Data: `2026-04-10`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: ajustar a metodologia do projeto para favorecer escrita manual guiada em vez de edicao automatica de codigo.
+- O que fiz:
+  - registrei a nova preferencia do projeto nos documentos centrais;
+  - alinhei `AGENTS`, `contexto`, `trilha`, `status` e `logbook` com a abordagem de ensino desejada.
+- O que mudou e por quê:
+  - a partir de agora, o padrao sera mostrar no chat como o arquivo deve ficar, explicar parte por parte e deixar a digitacao principal com o usuario;
+  - isso reforca o aprendizado ativo e reduz a sensacao de “codigo apareceu pronto sem eu entender”.
+- Como a explicação foi conduzida:
+  - a preferencia foi explicitamente transformada em regra de trabalho do projeto;
+  - a metodologia agora exige blocos pequenos, explicacao por funcao e propostas de exercicio.
+- O que aprendi em C++:
+  - escrever o codigo manualmente ajuda a fixar sintaxe, estrutura e responsabilidade de cada arquivo.
+- O que aprendi em OpenGL:
+  - o ritmo ideal de estudo envolve testar pequenas mudancas visuais depois de entender cada chamada importante.
+- Dificuldades:
+  - o fluxo anterior privilegiava mais implementacao direta do que escrita guiada.
+- Erros, warnings ou bloqueios e o que significam:
+  - nao houve erro tecnico novo nesta sessao;
+  - o ajuste foi metodologico e pedagogico.
+- Decisões tomadas:
+  - evitar edicao automatica de codigo por padrao;
+  - usar o chat como espaco principal para mostrar arquivos-alvo, explicacoes e tarefas.
+- Próximo passo: continuar a Etapa 1 explicando o arquivo atual em blocos e deixando o usuario implementar a proxima pequena interacao.
+
+## Sessão - 2026-04-10 12:44
+- Data: `2026-04-10`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: transformar a aplicação de console na primeira janela real da trilha.
+- O que fiz:
+  - atualizei o `CMakeLists.txt` para encontrar e linkar `OpenGL` e `GLFW`;
+  - substituí a saída de console em `App::run()` por inicialização de `GLFW`, criação de janela e loop principal;
+  - adicionei callback de resize da viewport;
+  - adicionei fechamento com tecla `ESC`.
+- O que mudou e por quê:
+  - o projeto saiu do modo “programa de terminal” para uma aplicação gráfica mínima;
+  - usei apenas `GLFW` e chamadas básicas de OpenGL por enquanto para reduzir a quantidade de conceitos novos de uma vez;
+  - `GLAD` ficou para o próximo passo, quando entrarmos em OpenGL moderno com mais profundidade.
+- O que aprendi em C++:
+  - classes pequenas continuam úteis mesmo quando interagimos com APIs em C, como `GLFW`;
+  - constantes da classe, como largura e altura da janela, ajudam a evitar numeros magicos espalhados;
+  - callbacks em APIs C costumam ser funcoes livres ou estaticas, nao metodos comuns de objeto.
+- O que aprendi em OpenGL:
+  - `glfwInit()` prepara a biblioteca;
+  - `glfwCreateWindow()` cria janela e contexto;
+  - `glfwMakeContextCurrent()` ativa o contexto da thread atual;
+  - `glClearColor()` define a cor usada para limpar a tela;
+  - `glClear()` realmente limpa o buffer de cor;
+  - `glfwSwapBuffers()` mostra o quadro pronto;
+  - `glfwPollEvents()` processa teclado, mouse e eventos da janela.
+- Dificuldades:
+  - foi preciso escolher uma primeira integracao enxuta para nao introduzir `GLFW`, `GLAD`, shaders e VAOs tudo ao mesmo tempo.
+- Erros, warnings ou bloqueios e o que significam:
+  - ainda nao ha bloqueio tecnico para a primeira janela;
+  - o principal ponto em aberto agora e pedagogico: explicar bem o loop principal e o papel de cada chamada antes de seguir.
+- Decisões tomadas:
+  - entregar primeiro uma janela limpa com cor fixa;
+  - adiar `GLAD` para manter a etapa 1 focada em contexto, loop e render basico.
+- Próximo passo: explicar linha por linha a janela atual e adicionar uma pequena interacao visivel.
+
+## Sessão - 2026-04-10 12:35
+- Data: `2026-04-10`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: corrigir a forma como o VS Code executa o projeto e preparar a base de formatação.
+- O que fiz:
+  - identifiquei que o erro de `app.hpp` vinha do `Code Runner` compilando apenas `main.cpp`;
+  - criei `.vscode/tasks.json` para configurar, compilar e rodar o projeto com `CMake` e `Ninja`;
+  - criei `.vscode/settings.json` para melhorar IntelliSense, execução e integração com `Code Runner`;
+  - criei `.clang-format` como base de formatação do projeto.
+- O que mudou e por quê:
+  - o projeto agora ensina e usa o fluxo real de build, em vez de compilar um único arquivo isolado;
+  - isso evita erros falsos de include e prepara o ambiente para um projeto C++ maior.
+- O que aprendi em C++:
+  - em projetos com multiplos arquivos, o compilador precisa conhecer todos os `.cpp` relevantes e os diretórios de headers;
+  - `#include "app.hpp"` nao procura magicamente em qualquer pasta; ele depende da configuracao do compilador.
+- O que aprendi em OpenGL:
+  - projetos graficos quase sempre dependem de um build system mais serio, porque rapidamente deixam de caber no modelo “um arquivo so”.
+- Dificuldades:
+  - o `Code Runner` mascara o problema porque parece simples, mas usa um fluxo inadequado para projetos C++ estruturados.
+- Erros, warnings ou bloqueios e o que significam:
+  - `fatal error: app.hpp: Arquivo ou diretório inexistente` nao significou que o arquivo estava ausente;
+  - significou que a ferramenta estava compilando `main.cpp` sem incluir `${workspaceFolder}/include`;
+  - mesmo que esse erro sumisse, ainda haveria risco de erro de link se `src/app.cpp` nao fosse compilado junto.
+- Decisões tomadas:
+  - manter `CMake` como fluxo oficial do projeto;
+  - deixar o VS Code apontado para esse fluxo para reduzir atrito e confusao.
+- Próximo passo: testar a execucao pelo VS Code e, em seguida, integrar `GLFW`.
+
+## Sessão - 2026-04-10 12:28
+- Data: `2026-04-10`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: revalidar o ambiente após a instalação dos pacotes e provar que o fluxo com `CMake` funciona de verdade.
+- O que fiz:
+  - confirmei a instalação de `cmake`, `ninja-build`, `glfw-devel`, `glm-devel` e `mesa-libGL-devel`;
+  - testei novamente os headers de `GLFW`, `GLM` e `OpenGL`;
+  - configurei o projeto com `cmake -S . -B build -G Ninja`;
+  - compilei com `cmake --build build`;
+  - executei o binário gerado em `./build/cpp_1`.
+- O que mudou e por quê:
+  - o ambiente agora está pronto para desenvolvimento gráfico básico;
+  - isso nos permite sair da fase de preparação e começar a integração da primeira janela.
+- O que aprendi em C++:
+  - o código estava correto antes; o que faltava era o ambiente;
+  - build system e compilador são partes diferentes do processo, e ambas precisam funcionar.
+- O que aprendi em OpenGL:
+  - antes de desenhar qualquer coisa, precisamos validar a base da ferramenta que vai construir a aplicação gráfica;
+  - `GLFW` e os headers de `OpenGL` já estão prontos para a próxima etapa prática.
+- Dificuldades:
+  - `pkg-config --modversion glm` falhou mesmo com `glm` instalado.
+- Erros, warnings ou bloqueios e o que significam:
+  - `Package 'glm' not found` no `pkg-config` nao significou ausencia da biblioteca; apenas mostrou que o pacote nao fornece um arquivo `.pc` utilizavel nesse fluxo;
+  - `Error: could not load cache` apareceu porque o passo de build foi disparado em paralelo com a configuracao do `CMake`, antes de o cache ficar pronto;
+  - isso foi erro de sequenciamento de ferramenta, nao erro do projeto.
+- Decisões tomadas:
+  - considerar `glm` como validado pelo teste real de include no compilador;
+  - seguir para a primeira janela em vez de gastar mais tempo com empacotamento.
+- Próximo passo: integrar `GLFW` ao projeto, abrir a primeira janela e explicar cada parte do loop principal.
+
+## Sessão - 2026-04-10 12:23
+- Data: `2026-04-10`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: validar o ambiente atual e descobrir exatamente quais dependências faltam para começar a primeira janela OpenGL.
+- O que fiz:
+  - conferi o sistema operacional e as ferramentas principais de build;
+  - validei a presença de `g++`, `make` e `pkg-config`;
+  - confirmei que `cmake` ainda não está instalado;
+  - testei se o compilador encontra os headers de `GLFW`, `GLM` e `OpenGL`;
+  - conferi os pacotes Fedora instalados e pesquisei os nomes mais prováveis dos pacotes necessários.
+- O que mudou e por quê:
+  - atualizei a documentação do projeto com o estado real do ambiente;
+  - isso evita que a próxima sessão repita a mesma investigação e deixa claro o que depende de instalação manual.
+- O que aprendi em C++:
+  - compilar em C++ depende de duas camadas: o compilador e os arquivos de desenvolvimento das bibliotecas;
+  - quando um header não é encontrado, o problema normalmente está em include path ou pacote `-devel`, não necessariamente no código.
+- O que aprendi em OpenGL:
+  - para começar com OpenGL moderno, não basta ter `libGL` no sistema; também são necessários headers e bibliotecas de desenvolvimento;
+  - `GLFW` cuida da janela e do contexto, `GLM` cuida da matemática, e `GLAD` costuma cuidar do carregamento das funções OpenGL.
+- Dificuldades:
+  - `cmake` está ausente;
+  - `GLFW`, `GLM` e `OpenGL` de desenvolvimento ainda não estão prontos para compilação;
+  - a busca por `glad` no `dnf` falhou por problema de metadados de um repositório local.
+- Erros, warnings ou bloqueios e o que significam:
+  - `cmake: command not found`: a ferramenta de build ainda não está instalada;
+  - `fatal error: GLFW/glfw3.h: No such file or directory`: o header de desenvolvimento do GLFW não está disponível;
+  - `fatal error: glm/glm.hpp: No such file or directory`: a biblioteca matemática GLM não está instalada para desenvolvimento;
+  - `fatal error: GL/gl.h: No such file or directory`: os headers de desenvolvimento do OpenGL não estão instalados;
+  - `libGL.so.1` existir no sistema significa runtime presente, mas não garante headers para compilar.
+- Decisões tomadas:
+  - voce fara a instalacao manual dos pacotes;
+  - vamos manter o foco em entender cada dependencia antes de partir para a janela.
+- Próximo passo: instalar `cmake`, `glfw-devel`, `glm-devel` e `mesa-libGL-devel`, depois validar novamente o ambiente.
+
+## Sessão - 2026-04-10 12:10
+- Data: `2026-04-10`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: começar de fato a Etapa 1 estruturando o projeto para sair do exemplo de console puro.
+- O que fiz:
+  - criei um `CMakeLists.txt` inicial com `C++17` e warnings básicos;
+  - reorganizei o código para usar `main.cpp` + `App` + separação entre `include/` e `src/`;
+  - substituí o `Hello, World!` por uma aplicação de console mais intencional, que comunica o momento da trilha;
+  - criei uma task de `CMake` para o VS Code.
+- O que aprendi em C++:
+  - mesmo antes de abrir a janela, ja vale praticar separacao entre declaracao e implementacao;
+  - uma classe pequena como `App` ajuda a sair do `main` monolitico sem complicar demais;
+  - `const App app;` reforca a ideia de imutabilidade quando o objeto nao precisa mudar.
+- O que aprendi em OpenGL:
+  - a primeira entrega visual depende muito mais de contexto e build do que de shaders no comeco;
+  - preparar o terreno certo evita que a primeira janela vire uma gambiarra dificil de evoluir.
+- Dificuldades:
+  - `cmake` ainda nao esta instalado no ambiente observado;
+  - `GLFW` e `GLM` ainda nao foram encontrados.
+- Erros, warnings ou bloqueios e o que significam:
+  - `cmake: command not found` indica ausencia da ferramenta, nao erro no codigo C++;
+  - sem `cmake`, a nova task do editor nao consegue configurar o build.
+- Decisões tomadas:
+  - comecar pela estrutura correta mesmo sem conseguir validar a janela ainda;
+  - introduzir conceitos de C++ em paralelo com o setup grafico, como planejado na trilha.
+- Próximo passo: instalar e validar `CMake`, depois integrar `GLFW` para abrir a primeira janela.
+
+## Sessão - 2026-04-10 12:03
+- Data: `2026-04-10`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: estruturar a base documental para acompanhar a trilha de aprendizado sem perder contexto entre sessões.
+- O que fiz:
+  - revisei a trilha principal existente;
+  - identifiquei o estado atual do projeto e do ambiente;
+  - defini o sistema de acompanhamento com `status`, `logbook` e `etapas`;
+  - criei os documentos base para uso contínuo.
+- O que aprendi em C++:
+  - o projeto ainda está em um ponto inicial, com foco em programa de console simples;
+  - antes de avançar para conceitos mais ricos da linguagem, vale consolidar o fluxo de build correto para C++.
+- O que aprendi em OpenGL:
+  - a próxima evolução natural é sair do terminal e preparar contexto gráfico com janela, loop e render básico;
+  - a trilha de OpenGL começa pelo ambiente e pela pipeline mínima, não pelo conteúdo visual complexo.
+- Dificuldades:
+  - o ambiente observado ainda não tem `CMake` disponível;
+  - não há evidência de `GLFW` e `GLM` já configurados no sistema.
+- Erros, warnings ou bloqueios e o que significam:
+  - a ausencia dessas ferramentas significa bloqueio de ambiente, nao falha de logica no projeto.
+- Decisões tomadas:
+  - manter `docs/trilha.md` como plano macro;
+  - usar `docs/status.md` como ponto de retomada;
+  - usar `docs/etapas.md` para comparar plano e execução;
+  - registrar o progresso a cada sessão, mesmo sem fechar etapas.
+- Próximo passo: iniciar a Etapa 1 pela preparação do build com `CMake` e pelo setup da janela OpenGL.
