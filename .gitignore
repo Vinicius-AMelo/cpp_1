@@ -24,3 +24,4 @@ compile_commands.json
 *.dll
 *.so
 *.dylib
+docs/LearnOpenGL.pdf
