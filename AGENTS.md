@@ -11,6 +11,7 @@
   - acompanhamento operacional por etapa.
 
 ## Ordem recomendada de leitura
+0. `docs/LearnOpenGL.pdf`
 1. `docs/personalidade.md`
 2. `docs/contexto.md`
 3. `docs/status.md`

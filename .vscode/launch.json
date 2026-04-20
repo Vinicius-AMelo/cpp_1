@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug opengl_2",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\cmake-build-debug\\opengl_2.exe",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "CMake: build (VS Code debug)",
+      "MIMode": "gdb",
+      "miDebuggerPath": "${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\gdb\\win\\x64\\bin\\gdb.exe",
+      "environment": [
+        {
+          "name": "PATH",
+          "value": "${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\mingw\\bin;${env:PATH}"
+        }
+      ],
+      "setupCommands": [
+        {
+          "description": "Habilita pretty printing no GDB",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

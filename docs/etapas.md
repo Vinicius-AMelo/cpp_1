@@ -35,6 +35,7 @@
   - validar o ambiente após a instalação dos pacotes necessários.
   - configurar e compilar o projeto com `CMake` e `Ninja`.
   - executar o binário gerado pelo fluxo oficial de build.
+  - restaurar a integracao do workspace com VS Code usando `settings`, `tasks` e `launch` alinhados ao preset Windows validado.
   - preparar dependências de janela e contexto OpenGL;
   - abrir uma janela com loop estável;
   - limpar a tela com uma cor fixa;
@@ -55,6 +56,7 @@
   - a aplicacao abre uma janela GLFW funcional e renderiza uma cor de fundo.
   - o comportamento de input continuo vs input de pressionamento unico foi praticado no codigo.
   - o projeto agora tem caminho de build reproduzivel via presets para CLion com Ninja.
+  - o projeto voltou a ter fluxo direto de `build`, `run` e `debug` pelo VS Code no Windows sem depender de `ninja` ou `g++` no `PATH` global.
   - a diferenca entre problema de script CMake e problema de toolchain/ambiente foi validada na pratica.
 - Critérios de saída:
   - projeto compila via `CMake`;

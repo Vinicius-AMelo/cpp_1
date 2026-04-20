@@ -1,0 +1,56 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake: configure (VS Code debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--preset",
+        "clion-mingw-ninja-debug"
+      ],
+      "options": {
+        "env": {
+          "PATH": "${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\mingw\\bin;${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\ninja\\win\\x64;${env:PATH}"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: build (VS Code debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        "--preset",
+        "build-clion-mingw-ninja-debug"
+      ],
+      "dependsOn": "CMake: configure (VS Code debug)",
+      "options": {
+        "env": {
+          "PATH": "${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\mingw\\bin;${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\ninja\\win\\x64;${env:PATH}"
+        }
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "label": "Run: opengl_2 (VS Code debug build)",
+      "type": "shell",
+      "command": "${workspaceFolder}\\cmake-build-debug\\opengl_2.exe",
+      "dependsOn": "CMake: build (VS Code debug)",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\mingw\\bin;${env:PATH}"
+        }
+      },
+      "problemMatcher": []
+    }
+  ]
+}

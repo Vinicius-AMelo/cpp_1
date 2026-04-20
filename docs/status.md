@@ -30,8 +30,19 @@
   - explicar em palavras próprias o fluxo CPU -> VBO -> vertex shader -> fragment shader -> tela.
 
 ## Última atualização
-- Data: `2026-04-16 18:20:00 -03:00`
-- Contexto: consolidacao do setup CMake/Ninja para CLion em Windows e Linux, com estrategia hibrida para `GLFW`, fallback local para `GLAD` e presets dedicados para CLion MinGW.
+- Data: `2026-04-19 21:05:54 -03:00`
+- Contexto: restauracao da integracao do workspace com VS Code no Windows, reaproveitando a toolchain do CLion para `configure`, `build`, `run` e `debug` direto no editor.
+
+## Checkpoint VS Code
+- Validacao feita nesta sessao:
+  - `cmake --preset clion-mingw-ninja-debug`;
+  - `cmake --build --preset build-clion-mingw-ninja-debug`;
+  - inicializacao de `cmake-build-debug/opengl_2.exe`.
+- Ajustes aplicados:
+  - criados `.vscode/settings.json`, `.vscode/tasks.json`, `.vscode/launch.json` e `.vscode/extensions.json`;
+  - o workspace agora usa o preset `clion-mingw-ninja-debug` como caminho padrao no Windows;
+  - `PATH` do terminal, das tasks e do debug recebe `MinGW` e `Ninja` do CLion;
+  - `F5` foi ligado ao `gdb.exe` do bundle do CLion.
 
 ## Feito recentemente
 - Definida a trilha integrada de `C++ + OpenGL` em `8 etapas`.
@@ -93,8 +104,16 @@
 - Diagnostico de ambiente consolidado:
   - falha anterior no CLion MinGW era de toolchain/PATH (DLL), nao de sintaxe CMake;
   - warning de `pwsh.exe` observado no gerador Visual Studio vem da integracao global do `vcpkg`, nao do projeto.
+- Workspace do VS Code restaurado e validado em `2026-04-19`:
+  - tasks de `configure`, `build` e `run` recriadas;
+  - debug configurado com `gdb` do CLion;
+  - terminal integrado preparado com o `PATH` necessario para `MinGW` e `Ninja`.
 
 ## Próximo passo
+- Validar no proprio VS Code:
+  - `Ctrl+Shift+B` para build;
+  - `F5` para debug;
+  - task `Run: opengl_2 (VS Code debug build)` para execucao sem debugger.
 - Consolidar na próxima sessão prática, revisando rapidamente:
   - diferenca entre atributo de vertice e `uniform`;
   - significado de `stride` e `offset` no `glVertexAttribPointer`.
@@ -106,6 +125,9 @@
 
 ## Bloqueios
 - Nenhum bloqueio tecnico ativo no momento para build no Windows (CLion + Ninja validado).
+- Observacao importante de ambiente Windows:
+  - o preset `ninja-debug` continua dependendo de `ninja` e compilador no `PATH` global;
+  - no VS Code, o caminho recomendado agora e `clion-mingw-ninja-debug`.
 - Pendencia de validacao manual restante: executar o preset Ninja em Fedora para fechar check multiplataforma no ambiente Linux real.
 
 ## Aprendizados consolidados
@@ -119,6 +141,7 @@
 - Uma janela OpenGL mínima depende de três peças trabalhando juntas: contexto criado pelo `GLFW`, loop principal e chamada de limpeza da tela.
 - A forma de ensino mais adequada para este projeto privilegia escrita manual guiada, explicacao por partes e pequenos experimentos.
 - Input por frame e input por evento de pressionamento sao coisas diferentes e isso impacta diretamente o comportamento visual da aplicacao.
+- Em Windows, erros como `CMake was unable to find a build program corresponding to "Ninja"` podem ser apenas sinal de `PATH` incompleto no editor, e nao defeito no `CMakeLists.txt`.
 
 ## Pontos para revisar
 - Confirmar instalação e uso do stack escolhido no ambiente.

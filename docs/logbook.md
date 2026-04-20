@@ -27,6 +27,45 @@
 
 ## Sessões
 
+## Sessão - 2026-04-19 21:05
+- Data: `2026-04-19`
+- Duração opcional: `não registrada`
+- Objetivo da sessão: ajustar o projeto para rodar direto pelo VS Code no Windows sem configuracao manual fora do workspace.
+- O que fiz:
+  - reli `docs/status.md`, `docs/etapas.md`, `docs/contexto.md` e o historico do `logbook`;
+  - confirmei que a pasta `.vscode/` nao estava mais presente no repositório;
+  - diagnostiquei a falha do preset generico `ninja-debug`: a sessao atual do Windows nao tinha `ninja`, `gcc` nem `g++` no `PATH`;
+  - validei a toolchain instalada pelo CLion (`MinGW`, `Ninja` e `GDB`);
+  - validei `cmake --preset clion-mingw-ninja-debug`;
+  - validei `cmake --build --preset build-clion-mingw-ninja-debug`;
+  - validei a inicializacao de `cmake-build-debug/opengl_2.exe`;
+  - recriei `.vscode/settings.json`, `.vscode/tasks.json`, `.vscode/launch.json` e `.vscode/extensions.json`.
+- O que mudou e por quê:
+  - o workspace passou a carregar automaticamente o `PATH` necessario para o VS Code encontrar compilador, `ninja`, debugger e DLLs do runtime;
+  - as tasks e o debug agora usam o preset Windows que ja estava comprovadamente funcional fora do editor;
+  - isso reduz atrito de retomada e evita repetir o erro de "o projeto esta certo, mas o editor nao encontra a toolchain".
+- Como a explicação foi conduzida:
+  - foco em separar erro de projeto, erro de preset e erro de ambiente do editor;
+  - conexao direta entre `PATH`, `CMakePresets`, tasks e `launch.json`.
+- O que aprendi em C++:
+  - nesta sessao, o gargalo estava no sistema de build e na toolchain, nao na logica da aplicacao em si.
+- O que aprendi em OpenGL:
+  - em Windows, um executavel grafico pode compilar corretamente e ainda falhar para abrir se o processo nao enxergar as DLLs certas do runtime do compilador.
+- Dificuldades:
+  - o historico dizia que o workspace do VS Code ja estava pronto, mas a configuracao local nao estava mais presente;
+  - o erro do `CMake` mascarava que o problema central era ambiente do editor.
+- Erros, warnings ou bloqueios e o que significam:
+  - `CMake was unable to find a build program corresponding to "Ninja"` significa que o executavel `ninja` nao foi encontrado na sessao atual;
+  - `CMAKE_C_COMPILER not set` e `CMAKE_CXX_COMPILER not set` apareceram como consequencia da mesma ausencia de toolchain acessivel pelo editor;
+  - a correcao foi injetar o `PATH` correto no workspace e reaproveitar a toolchain do CLion, em vez de alterar o codigo-fonte.
+- Decisões tomadas:
+  - manter `clion-mingw-ninja-debug` como caminho oficial de uso no VS Code para Windows;
+  - manter a toolchain do CLion como dependencia local do workspace neste momento;
+  - registrar explicitamente o motivo do ajuste para evitar nova confusao em retomadas futuras.
+- Próximo passo:
+  - abrir o projeto no VS Code e validar `Ctrl+Shift+B` e `F5`;
+  - depois retomar a consolidacao conceitual da Etapa 2.
+
 ## Sessão - 2026-04-16 18:20
 - Data: `2026-04-16`
 - Duração opcional: `não registrada`

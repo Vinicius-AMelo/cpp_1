@@ -1,0 +1,16 @@
+{
+  "cmake.useCMakePresets": "always",
+  "cmake.configurePreset": "clion-mingw-ninja-debug",
+  "cmake.buildPreset": "build-clion-mingw-ninja-debug",
+  "cmake.configureOnOpen": false,
+  "cmake.statusbar.advanced": {
+    "build": true,
+    "configure": true,
+    "debug": true,
+    "launch": true
+  },
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "terminal.integrated.env.windows": {
+    "PATH": "${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\mingw\\bin;${env:LOCALAPPDATA}\\Programs\\CLion\\bin\\ninja\\win\\x64;${env:PATH}"
+  }
+}
