@@ -9,7 +9,8 @@
 
 #include <app/app.h>
 #include "objects/circle/circle.h"
-#include "objects/circle/cube.h"
+#include "objects/cube/cube.h"
+#include "objects/square/square.h"
 #include "settings/types.h"
 
 namespace
@@ -143,12 +144,12 @@ int App::run()
     }
     stbi_image_free(data);
 
-    const SphereMesh circle_mesh(0.6f);
-    Circle circle_1(circle_mesh, 0.0f, 0.0f);
-    Circle circle_2(circle_mesh, -0.3f, 0.0f);
-
-    const CubeMesh cube_mesh;
-    Cube cube_1(cube_mesh);
+    // const SphereMesh circle_mesh(0.6f);
+    // Circle circle_1(circle_mesh, 0.0f, 0.0f);
+    // Circle circle_2(circle_mesh, -0.3f, 0.0f);
+    //
+    // const CubeMesh cube_mesh;
+    // Cube cube_1(cube_mesh);
 
     std::string vertexCode = read_file("/triangle.vert");
     const char *shaderVertexCode = vertexCode.c_str();
@@ -192,18 +193,21 @@ int App::run()
     }
 
     // GLint uOffsetLocation = glGetUniformLocation(shaderProgram, "uOffset");
-    GLint modelLoc = glGetUniformLocation(shaderProgram, "model");
-    GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
-    GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    // GLint modelLoc = glGetUniformLocation(shaderProgram, "model");
+    // GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
+    // GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
+    // glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
 
     float lastTime = static_cast<float>(glfwGetTime());
     float fps = 0.0f;
     float smoothing = 0.9f;
+
+    SquareMesh square_mesh;
+    Square square(square_mesh);
 
     while (glfwWindowShouldClose(window) == GLFW_FALSE)
     {
@@ -222,9 +226,11 @@ int App::run()
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
 
-        cube_mesh.apply_matrices(modelLoc, viewLoc, projectionLoc);
-        
-        cube_1.draw();
+        // cube_mesh.apply_matrices(modelLoc, viewLoc, projectionLoc);
+        //
+        //
+
+        square.draw();
 
         // circle_1.update(deltaTime);
         // circle_1.sphere(modelLoc, viewLoc, projectionLoc);

@@ -15,10 +15,12 @@ add_executable(${PROJECT_NAME}
         src/graphics/vao.cpp
         src/graphics/vbo.cpp
         src/graphics/ebo.cpp
-        src/objects/circle.cpp
-        src/objects/circle_mesh.cpp
-        src/objects/cube.cpp
-        src/objects/cube_mesh.cpp
+        src/objects/circle/circle.cpp
+        src/objects/circle/circle_mesh.cpp
+        src/objects/cube/cube.cpp
+        src/objects/cube/cube_mesh.cpp
+        src/objects/square/square_mesh.cpp
+        src/objects/square/square.cpp
         src/stb_image.cpp
 )
 

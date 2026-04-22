@@ -1,5 +1,5 @@
 #pragma once
-#include "objects/circle/cube_mesh.h"
+#include "objects/cube/cube_mesh.h"
 
 class Cube
 {
