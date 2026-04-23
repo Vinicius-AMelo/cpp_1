@@ -21,7 +21,14 @@ add_executable(${PROJECT_NAME}
         src/objects/cube/cube_mesh.cpp
         src/objects/square/square_mesh.cpp
         src/objects/square/square.cpp
-        src/stb_image.cpp
+        lib/stb/stb_image.cpp
+        lib/gui/imgui.cpp
+        lib/gui/imgui_demo.cpp
+        lib/gui/imgui_draw.cpp
+        lib/gui/imgui_tables.cpp
+        lib/gui/imgui_widgets.cpp
+        lib/gui/imgui_impl_glfw.cpp
+        lib/gui/imgui_impl_opengl3.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
@@ -35,6 +42,7 @@ target_compile_definitions(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/lib/glm)
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/lib/stb)
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/lib/gui)
 
 
 # GLFW: abordagem hibrida.

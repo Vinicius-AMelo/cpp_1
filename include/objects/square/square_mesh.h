@@ -12,8 +12,7 @@ class SquareMesh
 {
   public:
     SquareMesh();
-
-    void apply_matrices(int modelLoc, int viewLoc, int projectionLoc) const;
+    
     void bind() const;
     void unbind() const;
     GLsizei indexCount() const;

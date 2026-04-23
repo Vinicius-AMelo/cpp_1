@@ -6,12 +6,22 @@
 #include <string>
 #include <vector>
 #include <stb_image.h>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include <app/app.h>
 #include "objects/circle/circle.h"
 #include "objects/cube/cube.h"
 #include "objects/square/square.h"
+#include "settings/input.h"
 #include "settings/types.h"
+
+WindowSettings windowSettings;
+InputSettings inputSettings;
 
 namespace
 {
@@ -37,10 +47,46 @@ std::string read_file(const std::string &path)
     return buffer.str();
 }
 
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+    (void)scancode;
+    (void)mods;
+
+    if (action == GLFW_PRESS)
+    {
+        if (key == GLFW_KEY_ESCAPE)
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+
+        if (key == GLFW_KEY_W)
+            inputSettings.setAxisY(1.0f);
+
+        if (key == GLFW_KEY_S)
+            inputSettings.setAxisY(-1.0f);
+
+        if (key == GLFW_KEY_D)
+            inputSettings.setAxisX(1.0f);
+
+        if (key == GLFW_KEY_A)
+            inputSettings.setAxisX(-1.0f);
+
+        return;
+    }
+
+    if (action == GLFW_RELEASE)
+    {
+        if (key == GLFW_KEY_W || key == GLFW_KEY_S)
+            inputSettings.setAxisY(0.0f);
+
+        if (key == GLFW_KEY_A || key == GLFW_KEY_D)
+            inputSettings.setAxisX(0.0f);
+    }
+}
+
 } // namespace
 
 int App::run()
 {
+
     int success;
     char infoLog[512];
 
@@ -57,8 +103,6 @@ int App::run()
     // Habilita o modo Core-Profile como perfil do OpenGL
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    WindowSettings windowSettings;
-
     // Cria a janela GLFW
     GLFWwindow *window = glfwCreateWindow(
         windowSettings.windowWidth,
@@ -67,7 +111,6 @@ int App::run()
         nullptr,
         nullptr
     );
-
     // Valida se a janela foi criada corretamente, do contrário finaliza o GLFW
     if (window == nullptr)
     {
@@ -79,6 +122,17 @@ int App::run()
     // Traz a janela criada para o contexto atual do GLFW
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
+    glfwSetKeyCallback(window, key_callback);
+
+    // Inicia o contexto Dear ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+    // Inicia os renders por plataforma
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init();
 
     // Inicia o GLAD
     if (gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)) != GL_TRUE)
@@ -133,6 +187,7 @@ int App::run()
         &nrChannels,
         0
     );
+
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -193,9 +248,9 @@ int App::run()
     }
 
     // GLint uOffsetLocation = glGetUniformLocation(shaderProgram, "uOffset");
-    // GLint modelLoc = glGetUniformLocation(shaderProgram, "model");
-    // GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
-    // GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    GLint modelLoc = glGetUniformLocation(shaderProgram, "model");
+    GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
+    GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -206,11 +261,43 @@ int App::run()
     float fps = 0.0f;
     float smoothing = 0.9f;
 
+    std::vector<GameObject *> gameObjects;
+
     SquareMesh square_mesh;
-    Square square(square_mesh);
+    Square square_1(square_mesh);
+    Square square_2(square_mesh);
+
+    gameObjects.push_back(&square_1);
+    gameObjects.push_back(&square_2);
+
+    glm::mat4 view = glm::mat4(1.0f);
+
+    // clang-format off
+    glm::mat4 projection = glm::ortho(
+          -1.0f,1.0f,
+          -1.0f, 1.0f
+    );
+    // clang-format on
+
+    for (auto &gameObject : gameObjects)
+    {
+        gameObject->start();
+    }
+
+    int selectedIndex = -1;
 
     while (glfwWindowShouldClose(window) == GLFW_FALSE)
     {
+
+        glfwPollEvents();
+        // Inicia o frame Dear ImGui
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        // ImGui::ShowDemoWindow();
+
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         const float currentTime = static_cast<float>(glfwGetTime());
         const float deltaTime = currentTime - lastTime;
@@ -226,11 +313,18 @@ int App::run()
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
 
-        // cube_mesh.apply_matrices(modelLoc, viewLoc, projectionLoc);
-        //
-        //
+        // Update
+        for (auto &gameObject : gameObjects)
+        {
+            gameObject->update(deltaTime);
+        }
 
-        square.draw();
+        // Draw
+        for (auto &gameObject : gameObjects)
+        {
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(gameObject->model));
+            gameObject->draw();
+        }
 
         // circle_1.update(deltaTime);
         // circle_1.sphere(modelLoc, viewLoc, projectionLoc);
@@ -238,10 +332,49 @@ int App::run()
 
         // circle_2.update(deltaTime);
         // circle_2.draw(uOffsetLocation);
+
+        ImGui::Begin("Objects");
+        for (int i = 0; i < static_cast<int>(gameObjects.size()); i++)
+        {
+            bool selected = (selectedIndex == i);
+            std::string label = "Object " + std::to_string(i);
+
+            if (ImGui::Selectable(label.c_str(), selected))
+                selectedIndex = i;
+        }
+        ImGui::End();
+
+        ImGui::Begin("Inspector");
+        if (selectedIndex >= 0 && selectedIndex < gameObjects.size())
+        {
+            GameObject *obj = gameObjects[selectedIndex];
+
+            glm::vec2 pos = obj->getPosition();
+            glm::vec2 scale = obj->getScale();
+
+            if (ImGui::DragFloat2("Position", &pos.x, 0.01f, -1.0f, 1.0f))
+                obj->setPosition(pos);
+
+            if (ImGui::DragFloat2("Scale", &scale.x, 0.01f))
+                obj->setScale(scale);
+
+            if (ImGui::Button("Aplicar"))
+                obj->rebuildModelMatrix();
+        }
+        else
+        {
+            ImGui::Text("No object selected");
+        }
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
-        glfwPollEvents();
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     glDeleteProgram(shaderProgram);
     glfwDestroyWindow(window);
     glfwTerminate();
