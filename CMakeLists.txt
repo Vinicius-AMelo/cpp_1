@@ -21,6 +21,10 @@ add_executable(${PROJECT_NAME}
         src/objects/cube/cube_mesh.cpp
         src/objects/square/square_mesh.cpp
         src/objects/square/square.cpp
+        src/editorUi/debug_ui.cpp
+        src/editorUi/panels/objects/object_panel.cpp
+        src/editorUi/panels/inspector/inspector_panel.cpp
+
         lib/stb/stb_image.cpp
         lib/gui/imgui.cpp
         lib/gui/imgui_demo.cpp
@@ -29,6 +33,8 @@ add_executable(${PROJECT_NAME}
         lib/gui/imgui_widgets.cpp
         lib/gui/imgui_impl_glfw.cpp
         lib/gui/imgui_impl_opengl3.cpp
+
+
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)

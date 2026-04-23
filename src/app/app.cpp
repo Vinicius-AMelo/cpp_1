@@ -9,15 +9,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-
 #include <app/app.h>
+
+#include "editorUI/debug_ui.h"
+#include "editorUI/panels/objects/inspector_panel.h"
+#include "editorUI/panels/objects/objects_panel.h"
 #include "objects/circle/circle.h"
-#include "objects/cube/cube.h"
 #include "objects/square/square.h"
-#include "settings/input.h"
 #include "settings/types.h"
 
 WindowSettings windowSettings;
@@ -124,15 +122,9 @@ int App::run()
     glfwSwapInterval(1);
     glfwSetKeyCallback(window, key_callback);
 
-    // Inicia o contexto Dear ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-    // Inicia os renders por plataforma
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init();
+    DebugUI::setup();
+    DebugUI::setupRenderLibs(window);
+    DebugUI::applyGUIStyles();
 
     // Inicia o GLAD
     if (gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)) != GL_TRUE)
@@ -148,25 +140,6 @@ int App::run()
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
-
-    // clang-format off
-	// float vertices[] = {
-	// 	// first triangle
-	// 	-0.9f, -0.5f, 0.0f,  // left
-	// 	-0.0f, -0.5f, 0.0f,  // right
-	// 	-0.45f, 0.5f, 0.0f,  // top
-	// 	// second triangle
-	// 	 0.0f, -0.5f, 0.0f,  // left
-	// 	 0.9f, -0.5f, 0.0f,  // right
-	// 	 0.45f, 0.5f, 0.0f   //
-	// };
-
-	// unsigned int indices[] = {
-	// 	0, 1, 2,
-	// 	0, 3, 2
-	// };
-
-    // clang-format on
 
     unsigned int texture1;
     glGenTextures(1, &texture1);
@@ -284,17 +257,17 @@ int App::run()
         gameObject->start();
     }
 
-    int selectedIndex = -1;
+    DebugContext context;
+    DebugUI debugUI;
+    context.gameObjects = &gameObjects;
+    debugUI.addPanel(std::make_unique<ObjectsPanel>(context));
+    debugUI.addPanel(std::make_unique<InspectorPanel>(context));
 
     while (glfwWindowShouldClose(window) == GLFW_FALSE)
     {
 
         glfwPollEvents();
-        // Inicia o frame Dear ImGui
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-        // ImGui::ShowDemoWindow();
+        DebugUI::init();
 
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -333,42 +306,21 @@ int App::run()
         // circle_2.update(deltaTime);
         // circle_2.draw(uOffsetLocation);
 
-        ImGui::Begin("Objects");
-        for (int i = 0; i < static_cast<int>(gameObjects.size()); i++)
-        {
-            bool selected = (selectedIndex == i);
-            std::string label = "Object " + std::to_string(i);
+        // ImGui::Begin("Objects");
+        // for (int i = 0; i < static_cast<int>(gameObjects.size()); i++)
+        // {
+        //     bool selected = (selectedIndex == i);
+        //     std::string label = "Object " + std::to_string(i);
+        //
+        //     if (ImGui::Selectable(label.c_str(), selected))
+        //         selectedIndex = i;
+        // }
+        // ImGui::End();
+        //
 
-            if (ImGui::Selectable(label.c_str(), selected))
-                selectedIndex = i;
-        }
-        ImGui::End();
+        debugUI.drawPanels();
+        DebugUI::render();
 
-        ImGui::Begin("Inspector");
-        if (selectedIndex >= 0 && selectedIndex < gameObjects.size())
-        {
-            GameObject *obj = gameObjects[selectedIndex];
-
-            glm::vec2 pos = obj->getPosition();
-            glm::vec2 scale = obj->getScale();
-
-            if (ImGui::DragFloat2("Position", &pos.x, 0.01f, -1.0f, 1.0f))
-                obj->setPosition(pos);
-
-            if (ImGui::DragFloat2("Scale", &scale.x, 0.01f))
-                obj->setScale(scale);
-
-            if (ImGui::Button("Aplicar"))
-                obj->rebuildModelMatrix();
-        }
-        else
-        {
-            ImGui::Text("No object selected");
-        }
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
     }
 
