@@ -1,8 +1,4 @@
-#include "objects/square/square_mesh.h"
-
-#include <cmath>
-
-#include <GLFW/glfw3.h>
+#include "meshes/square/square_mesh.h"
 
 SquareMesh::SquareMesh()
 {

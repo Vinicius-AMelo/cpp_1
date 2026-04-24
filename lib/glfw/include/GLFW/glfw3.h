@@ -6429,7 +6429,7 @@ GLFWAPI GLFWvkproc glfwGetInstanceProcAddress(VkInstance instance, const char* p
  *  a `vkGetPhysicalDevice*PresentationSupport` type function.
  *
  *  @thread_safety This function may be called from any thread.  For
- *  synchronization details of Vulkan objects, see the Vulkan specification.
+ *  synchronization details of Vulkan gameObjects, see the Vulkan specification.
  *
  *  @sa @ref vulkan_present
  *
@@ -6498,7 +6498,7 @@ GLFWAPI int glfwGetPhysicalDevicePresentationSupport(VkInstance instance, VkPhys
  *  returned by @ref glfwGetRequiredInstanceExtensions.
  *
  *  @thread_safety This function may be called from any thread.  For
- *  synchronization details of Vulkan objects, see the Vulkan specification.
+ *  synchronization details of Vulkan gameObjects, see the Vulkan specification.
  *
  *  @sa @ref vulkan_surface
  *  @sa @ref glfwGetRequiredInstanceExtensions

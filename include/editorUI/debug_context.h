@@ -1,6 +1,6 @@
 #pragma once
 
-#include "objects/gameObject.h"
+#include "../gameObjects/gameObject.h"
 
 #include <vector>
 struct DebugContext

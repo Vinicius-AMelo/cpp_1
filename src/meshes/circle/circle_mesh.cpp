@@ -1,4 +1,4 @@
-#include "objects/circle/circle_mesh.h"
+#include "meshes/circle/circle_mesh.h"
 
 #include <cmath>
 #include <glm/glm.hpp>

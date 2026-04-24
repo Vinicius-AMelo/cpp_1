@@ -2808,7 +2808,7 @@ void ImFontAtlasUpdateNewFrame(ImFontAtlas* atlas, int frame_count, bool rendere
 
         // If a texture has never reached the backend, they don't need to know about it.
         // (note: backends between 1.92.0 and 1.92.4 could set an already destroyed texture to ImTextureStatus_WantDestroy
-        //  when invalidating graphics objects twice, which would previously remove it from the list and crash.)
+        //  when invalidating graphics gameObjects twice, which would previously remove it from the list and crash.)
         if (tex->Status == ImTextureStatus_WantDestroy && tex->TexID == ImTextureID_Invalid && tex->BackendUserData == NULL)
             tex->Status = ImTextureStatus_Destroyed;
 

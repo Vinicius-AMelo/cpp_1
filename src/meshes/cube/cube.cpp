@@ -1,4 +1,4 @@
-#include "objects/cube/cube.h"
+#include "meshes/cube/cube.h"
 
 Cube::Cube(const CubeMesh &mesh) : _mesh(mesh) {}
 

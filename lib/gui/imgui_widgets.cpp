@@ -8647,7 +8647,7 @@ static void ImGuiSelectionBasicStorage_BatchFinish(ImGuiSelectionBasicStorage* s
 // - Enable 'Demo->Tools->Debug Log->Selection' to see selection requests as they happen.
 // - Honoring SetRange requests requires that you can iterate/interpolate between RangeFirstItem and RangeLastItem.
 //   - In this demo we often submit indices to SetNextItemSelectionUserData() + store the same indices in persistent selection.
-//   - Your code may do differently. If you store pointers or objects ID in ImGuiSelectionUserData you may need to perform
+//   - Your code may do differently. If you store pointers or gameObjects ID in ImGuiSelectionUserData you may need to perform
 //     a lookup in order to have some way to iterate/interpolate between two items.
 // - A full-featured application is likely to allow search/filtering which is likely to lead to using indices
 //   and constructing a view index <> object id/ptr data structure anyway.

@@ -1,4 +1,4 @@
-#include "objects/cube/cube_mesh.h"
+#include "meshes/cube/cube_mesh.h"
 
 #include <cmath>
 #include <glm/glm.hpp>

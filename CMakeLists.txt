@@ -15,12 +15,12 @@ add_executable(${PROJECT_NAME}
         src/graphics/vao.cpp
         src/graphics/vbo.cpp
         src/graphics/ebo.cpp
-        src/objects/circle/circle.cpp
-        src/objects/circle/circle_mesh.cpp
-        src/objects/cube/cube.cpp
-        src/objects/cube/cube_mesh.cpp
-        src/objects/square/square_mesh.cpp
-        src/objects/square/square.cpp
+        src/meshes/circle/circle.cpp
+        src/meshes/circle/circle_mesh.cpp
+        src/meshes/cube/cube.cpp
+        src/meshes/cube/cube_mesh.cpp
+        src/meshes/square/square_mesh.cpp
+        src/gameObjects/player/player.cpp
         src/editorUi/debug_ui.cpp
         src/editorUi/panels/objects/object_panel.cpp
         src/editorUi/panels/inspector/inspector_panel.cpp
@@ -33,8 +33,6 @@ add_executable(${PROJECT_NAME}
         lib/gui/imgui_widgets.cpp
         lib/gui/imgui_impl_glfw.cpp
         lib/gui/imgui_impl_opengl3.cpp
-
-
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)

@@ -1,15 +1,15 @@
 #pragma once
-#include "objects/gameObject.h"
-#include "objects/square/square_mesh.h"
+#include "../gameObject.h"
+#include "meshes/square/square_mesh.h"
 
-class Square : public GameObject
+class Player : public GameObject
 {
   private:
     SquareMesh _mesh;
 
   protected:
   public:
-    Square(const SquareMesh &mesh);
+    Player(const SquareMesh &mesh);
     void update(float deltaTime) override;
     void start() override;
     void draw() const override;

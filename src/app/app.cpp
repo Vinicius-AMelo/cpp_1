@@ -14,8 +14,8 @@
 #include "editorUI/debug_ui.h"
 #include "editorUI/panels/objects/inspector_panel.h"
 #include "editorUI/panels/objects/objects_panel.h"
-#include "objects/circle/circle.h"
-#include "objects/square/square.h"
+#include "meshes/circle/circle.h"
+#include "../../include/gameObjects/player/player.h"
 #include "settings/types.h"
 
 WindowSettings windowSettings;
@@ -237,11 +237,11 @@ int App::run()
     std::vector<GameObject *> gameObjects;
 
     SquareMesh square_mesh;
-    Square square_1(square_mesh);
-    Square square_2(square_mesh);
+    Player player(square_mesh);
+    // Square square_2(square_mesh);
 
-    gameObjects.push_back(&square_1);
-    gameObjects.push_back(&square_2);
+    gameObjects.push_back(&player);
+    // gameObjects.push_back(&square_2);
 
     glm::mat4 view = glm::mat4(1.0f);
 
